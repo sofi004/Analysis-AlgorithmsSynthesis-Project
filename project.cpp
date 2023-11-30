@@ -14,8 +14,8 @@ void readinput(){
     int n;
     scanf("%d %d", &X, &Y);
     scanf("%d", &n);
-    vector<vector<int>> vect(n, vector<int>(3));
-    vector<vector<int>> matrix(X, vector<int>(Y, 0));
+    vect = vector<vector<int>> (n, vector<int>(3));
+    matrix = vector<vector<int>> (X, vector<int>(Y, 0));
 
     for(int i = 0; i < n; i++){
         scanf("%d %d %d", &vect[i][0], &vect[i][1], &vect[i][2]);
