@@ -11,27 +11,76 @@ vector<vector<int>> matrix;
 
 
 void readinput(){
-    int n;
-    scanf("%d %d", &X, &Y);
-    scanf("%d", &n);
+    int n, trash;
+    trash = scanf("%d %d", &X, &Y);
+    (void) trash;
+    trash = scanf("%d", &n);
+    (void) trash;
     vect = vector<vector<int>> (n, vector<int>(3));
-    matrix = vector<vector<int>> (X, vector<int>(Y, 0));
-
+    matrix = vector<vector<int>> (X + 1, vector<int>(Y + 1, 0));
+    int x_temp, y_temp, v_temp;
     for(int i = 0; i < n; i++){
-        scanf("%d %d %d", &vect[i][0], &vect[i][1], &vect[i][2]);
-        matrix[vect[i][0]][vect[i][1]] = vect[i][2];
-        printf("%d %d %d\n",  vect[i][0], vect[i][1], vect[i][2]);
+        trash = scanf("%d %d %d", &x_temp, &y_temp, &v_temp);
+        (void) trash;
+        if((x_temp || y_temp || v_temp) <= 0){
+            i--;
+            n--;
+            continue;
+        }
+        vect[i][0] = x_temp;
+        vect[i][1] = y_temp;
+        vect[i][2] = v_temp;
+        if(x_temp <= X && y_temp <= Y){
+            matrix[vect[i][0]][vect[i][1]] = vect[i][2];
+        }
+        if(x_temp <= Y && y_temp <= X){
+            matrix[vect[i][1]][vect[i][0]] = vect[i][2];
+        }
+        //printf("%d %d %d\n",  vect[i][0], vect[i][1], vect[i][2]);
     }
 }
 
 int main(){
     readinput();
-    for (int i = 0; i < X; i++) {
-        for (int j = 0; j < Y; j++) {
-            printf("%d", matrix[i][j]);
+    /*for (int i = 0; i <= X; i++) {
+        for (int j = 0; j <= Y; j++) {
+            printf("%d  ", matrix[i][j]);
         }
         printf("\n");
     }
-
+    printf("\n\n\n");*/
+    int y_line_higher = 0;
+    int y_resto;
+    int x_resto;
+    int temp_value_line;
+    int temp_value_column;
+    int max_value;
+    vector<int> x_line_higher(Y + 1, 0);
+        for (int i = 1; i <= X; i++) {
+            for (int j = 1; j <= Y; j++) {
+                //procura na linha atual qual é o maior valor e coloca
+                y_resto = j - y_line_higher;
+                temp_value_line = matrix[i][y_line_higher] + matrix[i][y_resto];
+                //caso da coluna atual
+                x_resto = i - x_line_higher[j];
+                temp_value_column = matrix[x_line_higher[j]][j] + matrix[x_resto][j];
+                //comparações
+                max_value = max(max(temp_value_column, temp_value_line), matrix[i][j]);
+                matrix[i][j] = max_value;
+                if(max_value > matrix[i][y_line_higher] ){
+                    y_line_higher = j;    
+                }
+                if(max_value > matrix[x_line_higher[j]][j])
+                    x_line_higher[j] = i;
+            }
+            y_line_higher = 0;
+        }
+    //for (int i = 0; i <= X; i++) {
+    //    for (int j = 0; j <= Y; j++) {
+    //        printf("%d  ", matrix[i][j]);
+    //    }
+    //printf("\n");
+    //}
+    printf("%d\n", matrix[X][Y]);
     return 0;
 }
