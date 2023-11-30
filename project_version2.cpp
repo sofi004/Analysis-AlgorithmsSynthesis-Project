@@ -6,7 +6,6 @@
 using namespace std;
 
 int X, Y;
-vector<vector<int>> vect;
 vector<vector<int>> matrix;
 
 
@@ -16,7 +15,6 @@ void readinput(){
     (void) trash;
     trash = scanf("%d", &n);
     (void) trash;
-    vect = vector<vector<int>> (n, vector<int>(3));
     matrix = vector<vector<int>> (X + 1, vector<int>(Y + 1, 0));
     int x_temp, y_temp, v_temp;
     for(int i = 0; i < n; i++){
@@ -27,14 +25,11 @@ void readinput(){
             n--;
             continue;
         }
-        vect[i][0] = x_temp;
-        vect[i][1] = y_temp;
-        vect[i][2] = v_temp;
         if(x_temp <= X && y_temp <= Y){
-            matrix[vect[i][0]][vect[i][1]] = vect[i][2];
+            matrix[x_temp][y_temp] = v_temp;
         }
         if(x_temp <= Y && y_temp <= X){
-            matrix[vect[i][1]][vect[i][0]] = vect[i][2];
+            matrix[y_temp][x_temp] = v_temp;
         }
         //printf("%d %d %d\n",  vect[i][0], vect[i][1], vect[i][2]);
     }
