@@ -32,7 +32,7 @@ void readinput(){
             printf("%d %d %d\n", x_temp, y_temp, matrix[x_temp -1][y_temp -1]);
         }
     }
-    ids = vector<int>(N, 0);
+    ids = vector<int>(N, -1);
     low = vector<int>(N, 0);
     onStack = vector<bool>(N, false);
 }
@@ -65,9 +65,6 @@ void dfs(int currentId){
 }
 
 vector <int> findSCC(){
-    for(int i = 0; i < N; i++){
-        ids[i] = -1;
-    }
     for(int i = 0; i < N; i++){
         if(ids[i] == -1){
             dfs(i);
