@@ -2,6 +2,7 @@
 #include <vector>
 #include <stack>
 #include <algorithm>
+#include <cstdio>
 
 using namespace std;
 
@@ -18,56 +19,68 @@ void readinput() {
     int trash;
     trash = scanf("%d %d", &N, &M);
     printf("%d %d\n", N, M);
-    (void) trash;
+    (void)trash;
     matrix = vector<vector<int>>(N, vector<int>(N, 0));
     int x_temp, y_temp;
     for (int i = 0; i < M; i++) {
         trash = scanf("%d %d", &x_temp, &y_temp);
-        (void) trash;
+        (void)trash;
         printf("%d %d\n", x_temp, y_temp);
-        if (((x_temp - 1) < N) && ((y_temp - 1) < N) && ((x_temp) > 0) && ((y_temp) > 0)) {
+        if (x_temp > 0 && y_temp > 0) {
             matrix[x_temp - 1][y_temp - 1] = 1;
             printf("%d %d %d\n", x_temp, y_temp, matrix[x_temp - 1][y_temp - 1]);
         }
     }
     ids = vector<int>(N, -1);
-    low = vector<int>(N, -1);
+    low = vector<int>(N, 0);
     onStack = vector<bool>(N, false);
 }
 
 void dfs(int start) {
-    tarjanStack.push(start);
-    onStack[start] = true;
-    ids[start] = low[start] = id++;
+    stack<pair<int, int>> s;
+    s.push({start, 0});
 
-    while (!tarjanStack.empty()) {
-        int currentId = tarjanStack.top();
-        int neighbor = 0;
+    while (!s.empty()) {
+        int currentId = s.top().first;
+        int nextNeighbor = s.top().second;
+        s.pop();
+
+        if (nextNeighbor == 0) {
+            tarjanStack.push(currentId);
+            onStack[currentId] = true;
+            ids[currentId] = low[currentId] = id++;
+        }
+
         bool found = false;
-
-        while (neighbor < N) {
+        for (int neighbor = nextNeighbor; neighbor < N; neighbor++) {
             if (matrix[currentId][neighbor] == 1) {
                 if (ids[neighbor] == -1) {
-                    tarjanStack.push(neighbor);
-                    onStack[neighbor] = true;
-                    ids[neighbor] = low[neighbor] = id++;
+                    s.push({currentId, neighbor + 1});
+                    s.push({neighbor, 0});
                     found = true;
                     break;
-                }
-                if (onStack[neighbor]) {
-                    low[currentId] = min(low[currentId], low[neighbor]);
+                } else if (onStack[neighbor]) {
+                    low[currentId] = min(low[currentId], ids[neighbor]);
                 }
             }
-            neighbor++;
         }
 
         if (!found) {
-            int node = tarjanStack.top();
-            tarjanStack.pop();
-            onStack[node] = false;
-            low[node] = low[currentId];
+            if (nextNeighbor > 0) {
+                int node = tarjanStack.top();
+                low[currentId] = min(low[currentId], low[node]);
+            }
 
-            if (node == start) break;
+            if (low[currentId] == ids[currentId]) {
+                // currentId é o início de uma nova componente fortemente conectada
+                while (!tarjanStack.empty()) {
+                    int v = tarjanStack.top();
+                    tarjanStack.pop();
+                    onStack[v] = false;
+                    low[v] = low[currentId]; // atualizar todos os nós na SCC com o mesmo valor
+                    if (v == currentId) break;
+                }
+            }
         }
     }
 }
