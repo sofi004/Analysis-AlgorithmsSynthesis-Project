@@ -26,7 +26,8 @@ void readinput(){
     for(int i = 0; i < M; i++){
         trash = scanf("%d %d", &x_temp, &y_temp);
         (void) trash;
-        if((x_temp -1) < N && (y_temp -1) < N && (x_temp-1) > 0 && (y_temp-1) > 0){
+        printf("%d %d\n", x_temp, y_temp);
+        if(((x_temp -1) < N) && ((y_temp -1) < N) && ((x_temp) > 0) && ((y_temp) > 0)){
             matrix[x_temp -1][y_temp -1] = 1;
             printf("%d %d %d\n", x_temp, y_temp, matrix[x_temp -1][y_temp -1]);
         }
@@ -65,7 +66,7 @@ void dfs(int currentId){
 
 vector <int> findSCC(){
     for(int i = 0; i < N; i++){
-        ids[i] == -1;
+        ids[i] = -1;
     }
     for(int i = 0; i < N; i++){
         if(ids[i] == -1){
