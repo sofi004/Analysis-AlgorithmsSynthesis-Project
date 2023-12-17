@@ -148,6 +148,8 @@ void longestPath(){
         for(int j =0; j < sccCount; j++){
             receptors[i] += dag[j][i];
         }
+        printf("%d ", receptors[i]);
+        printf("\n");
         if(receptors[i] == 0){
             longestPathStack.push(i);
         }
@@ -159,6 +161,7 @@ void longestPath(){
             if(dag[currentNode][i] == 1){
                 receptors[i]--;
                 longestPathList[i] = max(longestPathList[i], longestPathList[currentNode] + 1);
+                printf("%d \n", longestPathList[i]);
                 if(receptors[i] == 0){
                     longestPathStack.push(i);
                 }
@@ -166,7 +169,11 @@ void longestPath(){
         }
     }
     printf("\n");
-    printf("%d \n", longestPathList[sccCount -1]);
+    int res = 0;
+    for(int i = 0; i < sccCount; i++){
+        res = max(res, longestPathList[i]);
+    }
+    printf("%d \n", res);
 }
 
 int main() {
