@@ -113,15 +113,11 @@ void builtMatrix(){
         }
         else{
             for(int j = 0; j< N; j++){
-                if(matrix[i][j] == 1){
-                    if( temp != j){
+                if(matrix[i][j] == 1 && temp != j){
                         matrix[temp][j] = 1;
-                    }
                 }
-                if(matrix[j][i] == 1){
-                    if( temp != j){
+                if(matrix[j][i] == 1 && temp != j){
                     matrix[j][temp] = 1;
-                    }
                 }
             }
         }
@@ -141,6 +137,36 @@ void builtMatrix(){
         }
         printf("\n");
     }
+}
+
+void longestPath(){
+    int currentNode;
+    vector<int> receptors = vector<int>(sccCount, 0);
+    vector<int> longestPathList = vector<int>(sccCount, 0);
+    stack<int> longestPathStack;
+    for(int i = 0; i < sccCount; i++){
+        for(int j =0; j < sccCount; j++){
+            receptors[i] += dag[j][i];
+        }
+        if(receptors[i] == 0){
+            longestPathStack.push(i);
+        }
+    }
+    while(!longestPathStack.empty()){
+        currentNode = longestPathStack.top();
+        longestPathStack.pop();
+        for(int i = 0; i < sccCount; i++){
+            if(dag[currentNode][i] == 1){
+                receptors[i]--;
+                longestPathList[i] = max(longestPathList[i], longestPathList[currentNode] + 1);
+                if(receptors[i] == 0){
+                    longestPathStack.push(i);
+                }
+            }
+        }
+    }
+    printf("\n");
+    printf("%d \n", longestPathList[sccCount -1]);
 }
 
 int main() {
@@ -166,5 +192,6 @@ int main() {
         }
         printf("\n");
     }
+    longestPath();
     return 0;
 }
