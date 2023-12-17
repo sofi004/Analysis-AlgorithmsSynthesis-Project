@@ -114,10 +114,14 @@ void builtMatrix(){
         else{
             for(int j = 0; j< N; j++){
                 if(matrix[i][j] == 1){
-                    matrix[temp][j] = 1;
+                    if( temp != j){
+                        matrix[temp][j] = 1;
+                    }
                 }
                 if(matrix[j][i] == 1){
+                    if( temp != j){
                     matrix[j][temp] = 1;
+                    }
                 }
             }
         }
