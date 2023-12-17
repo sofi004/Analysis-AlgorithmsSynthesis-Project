@@ -101,16 +101,12 @@ void builtMatrix(){
     int foundSccCount = 0;
     for(int i = 0; i < N; i++){
         int temp = -1;
-        printf("ola\n");
         for(int j = 0; j < foundSccCount; j++){
-            printf("ola\n");
             if(low[i] == foundScc[0][j]){
                 temp = foundScc[1][j];
             }
         }
         if(temp == -1){
-            printf("ola\n");
-            printf("%d %d\n", foundSccCount, sccCount);
             foundScc[0][foundSccCount] = low[i];
             foundScc[1][foundSccCount] = i;
             foundSccCount++;
@@ -127,9 +123,16 @@ void builtMatrix(){
         }
     }
     dag = vector<vector<int>>(sccCount, vector<int>(sccCount, 0));
+    printf("\n");
+    printf("\n");
+    for(int j = 0; j < sccCount; j++){
+        printf("%d ", foundScc[1][j]);
+    }
+    printf("\n");
+    printf("\n");
     for(int i = 0; i < sccCount; i++){
         for(int j = 0; j < sccCount; j++){
-            dag[i][j] = matrix[i][foundScc[1][j]];
+            dag[i][j] = matrix[foundScc[1][i]][foundScc[1][j]];
             printf("%d ", dag[i][j]);
         }
         printf("\n");
@@ -151,7 +154,13 @@ int main() {
         printf("%d ", low[i]);
     }
     printf("\n");
-    printf("%d\n", sccCount);
     builtMatrix();
+    printf("\n");
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < N; j++) {
+            printf("%d ", matrix[i][j]);
+        }
+        printf("\n");
+    }
     return 0;
 }
