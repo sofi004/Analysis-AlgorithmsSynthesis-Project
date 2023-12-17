@@ -19,17 +19,14 @@ vector<bool> onStack;
 void readinput() {
     int trash;
     trash = scanf("%d %d", &N, &M);
-    printf("%d %d\n", N, M);
     (void)trash;
     matrix = vector<vector<int>>(N, vector<int>(N, 0));
     int x_temp, y_temp;
     for (int i = 0; i < M; i++) {
         trash = scanf("%d %d", &x_temp, &y_temp);
         (void)trash;
-        printf("%d %d\n", x_temp, y_temp);
         if (x_temp > 0 && y_temp > 0) {
             matrix[x_temp - 1][y_temp - 1] = 1;
-            printf("%d %d %d\n", x_temp, y_temp, matrix[x_temp - 1][y_temp - 1]);
         }
     }
     ids = vector<int>(N, -1);
@@ -87,13 +84,12 @@ void dfs(int start) {
     }
 }
 
-vector<int> findSCC() {
+void findSCC() {
     for (int i = 0; i < N; i++) {
         if (ids[i] == -1) {
             dfs(i);
         }
     }
-    return low;
 }
 
 void builtMatrix(){
@@ -123,19 +119,10 @@ void builtMatrix(){
         }
     }
     dag = vector<vector<int>>(sccCount, vector<int>(sccCount, 0));
-    printf("\n");
-    printf("\n");
-    for(int j = 0; j < sccCount; j++){
-        printf("%d ", foundScc[1][j]);
-    }
-    printf("\n");
-    printf("\n");
     for(int i = 0; i < sccCount; i++){
         for(int j = 0; j < sccCount; j++){
             dag[i][j] = matrix[foundScc[1][i]][foundScc[1][j]];
-            printf("%d ", dag[i][j]);
         }
-        printf("\n");
     }
 }
 
@@ -148,8 +135,6 @@ void longestPath(){
         for(int j =0; j < sccCount; j++){
             receptors[i] += dag[j][i];
         }
-        printf("%d ", receptors[i]);
-        printf("\n");
         if(receptors[i] == 0){
             longestPathStack.push(i);
         }
@@ -161,44 +146,23 @@ void longestPath(){
             if(dag[currentNode][i] == 1){
                 receptors[i]--;
                 longestPathList[i] = max(longestPathList[i], longestPathList[currentNode] + 1);
-                printf("%d \n", longestPathList[i]);
                 if(receptors[i] == 0){
                     longestPathStack.push(i);
                 }
             }
         }
     }
-    printf("\n");
     int res = 0;
     for(int i = 0; i < sccCount; i++){
         res = max(res, longestPathList[i]);
     }
-    printf("%d \n", res);
+    printf("%d\n", res);
 }
 
 int main() {
     readinput();
-    for (int i = 0; i < N; i++) {
-        for (int j = 0; j < N; j++) {
-            printf("%d ", matrix[i][j]);
-        }
-        printf("\n");
-    }
     findSCC();
-    printf("\n");
-    printf("\n");
-    for (int i = 0; i < N; i++) {
-        printf("%d ", low[i]);
-    }
-    printf("\n");
     builtMatrix();
-    printf("\n");
-    for (int i = 0; i < N; i++) {
-        for (int j = 0; j < N; j++) {
-            printf("%d ", matrix[i][j]);
-        }
-        printf("\n");
-    }
     longestPath();
     return 0;
 }
