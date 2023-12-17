@@ -8,6 +8,7 @@ using namespace std;
 
 int N, M;
 vector<vector<int>> matrix;
+vector<vector<int>> dag;
 int id = 0;
 int sccCount = 0;
 stack<int> tarjanStack;
@@ -80,6 +81,7 @@ void dfs(int start) {
                     low[v] = low[currentId]; // atualizar todos os nós na SCC com o mesmo valor
                     if (v == currentId) break;
                 }
+                sccCount++;
             }
         }
     }
@@ -94,8 +96,47 @@ vector<int> findSCC() {
     return low;
 }
 
+void builtMatrix(){
+    vector<vector<int>> foundScc = vector<vector<int>>(2, vector<int>(sccCount, -1));
+    int foundSccCount = 0;
+    for(int i = 0; i < N; i++){
+        int temp = -1;
+        printf("ola\n");
+        for(int j = 0; j < foundSccCount; j++){
+            printf("ola\n");
+            if(low[i] == foundScc[0][j]){
+                temp = foundScc[1][j];
+            }
+        }
+        if(temp == -1){
+            printf("ola\n");
+            printf("%d %d\n", foundSccCount, sccCount);
+            foundScc[0][foundSccCount] = low[i];
+            foundScc[1][foundSccCount] = i;
+            foundSccCount++;
+        }
+        else{
+            for(int j = 0; j< N; j++){
+                if(matrix[i][j] == 1){
+                    matrix[temp][j] = 1;
+                }
+                if(matrix[j][i] == 1){
+                    matrix[j][temp] = 1;
+                }
+            }
+        }
+    }
+    dag = vector<vector<int>>(sccCount, vector<int>(sccCount, 0));
+    for(int i = 0; i < sccCount; i++){
+        for(int j = 0; j < sccCount; j++){
+            dag[i][j] = matrix[i][foundScc[1][j]];
+            printf("%d ", dag[i][j]);
+        }
+        printf("\n");
+    }
+}
+
 int main() {
-    printf("ola\n");
     readinput();
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {
@@ -110,5 +151,7 @@ int main() {
         printf("%d ", low[i]);
     }
     printf("\n");
+    printf("%d\n", sccCount);
+    builtMatrix();
     return 0;
 }
