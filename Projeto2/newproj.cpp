@@ -9,12 +9,8 @@ using namespace std;
 int N, M;
 vector<vector<int>> matrix;
 vector<vector<int>> dag;
-int id = 0;
 int sccCount = 0;
-stack<int> tarjanStack;
-vector<int> ids;
 vector<int> low;
-vector<bool> onStack;
 
 void readinput() {
     int trash;
@@ -29,64 +25,62 @@ void readinput() {
             matrix[x_temp - 1][y_temp - 1] = 1;
         }
     }
-    ids = vector<int>(N, -1);
     low = vector<int>(N, 0);
-    onStack = vector<bool>(N, false);
 }
 
-void tarjan(int start) {
+void tarjan() {
+    int id = 0;
+    stack<int> tarjanStack;
+    vector<bool> onStack = vector<bool>(N, false);
     stack<pair<int, int>> s;
-    s.push({start, 0});
-
-    while (!s.empty()) {
-        int currentId = s.top().first;
-        int nextNeighbor = s.top().second;
-        s.pop();
-
-        if (nextNeighbor == 0) {
-            tarjanStack.push(currentId);
-            onStack[currentId] = true;
-            ids[currentId] = low[currentId] = id++;
-        }
-
-        bool found = false;
-        for (int neighbor = nextNeighbor; neighbor < N; neighbor++) {
-            if (matrix[currentId][neighbor] == 1) {
-                if (ids[neighbor] == -1) {
-                    s.push({currentId, neighbor + 1});
-                    s.push({neighbor, 0});
-                    found = true;
-                    break;
-                } else if (onStack[neighbor]) {
-                    low[currentId] = min(low[currentId], ids[neighbor]);
-                }
-            }
-        }
-
-        if (!found) {
-            if (nextNeighbor > 0) {
-                int node = tarjanStack.top();
-                low[currentId] = min(low[currentId], low[node]);
-            }
-
-            if (low[currentId] == ids[currentId]) {
-                while (!tarjanStack.empty()) {
-                    int v = tarjanStack.top();
-                    tarjanStack.pop();
-                    onStack[v] = false;
-                    low[v] = low[currentId];
-                    if (v == currentId) break;
-                }
-                sccCount++;
-            }
-        }
-    }
-}
-
-void findSCC() {
+    vector<int> ids = vector<int>(N, -1);
     for (int i = 0; i < N; i++) {
         if (ids[i] == -1) {
-            tarjan(i);
+            s.push({i, 0});
+
+            while (!s.empty()) {
+                int currentId = s.top().first;
+                int nextNeighbor = s.top().second;
+                s.pop();
+
+                if (nextNeighbor == 0) {
+                    tarjanStack.push(currentId);
+                    onStack[currentId] = true;
+                    ids[currentId] = low[currentId] = id++;
+                }
+
+                bool found = false;
+                for (int neighbor = nextNeighbor; neighbor < N; neighbor++) {
+                    if (matrix[currentId][neighbor] == 1) {
+                        if (ids[neighbor] == -1) {
+                            s.push({currentId, neighbor + 1});
+                            s.push({neighbor, 0});
+                            found = true;
+                            break;
+                        } else if (onStack[neighbor]) {
+                            low[currentId] = min(low[currentId], ids[neighbor]);
+                        }
+                    }
+                }
+
+                if (!found) {
+                    if (nextNeighbor > 0) {
+                        int node = tarjanStack.top();
+                        low[currentId] = min(low[currentId], low[node]);
+                    }
+
+                    if (low[currentId] == ids[currentId]) {
+                        while (!tarjanStack.empty()) {
+                            int v = tarjanStack.top();
+                            tarjanStack.pop();
+                            onStack[v] = false;
+                            low[v] = low[currentId];
+                            if (v == currentId) break;
+                        }
+                        sccCount++;
+                    }
+                }
+            }
         }
     }
 }
@@ -118,7 +112,7 @@ void builtMatrix(){
         }
     }
 }
-
+/*
 void longestPath(){
     int maximum = 0;
     vector<int> longestPathList = vector<int>(sccCount, 0);
@@ -134,10 +128,44 @@ void longestPath(){
     }
     printf("%d\n", maximum);
 }
+*/
+
+void longestPath(){
+    int currentNode;
+    vector<int> receptors = vector<int>(sccCount, 0);
+    vector<int> longestPathList = vector<int>(sccCount, 0);
+    stack<int> longestPathStack;
+    for(int i = 0; i < sccCount; i++){
+        for(int j =0; j < sccCount; j++){
+            receptors[i] += dag[j][i];
+        }
+        if(receptors[i] == 0){
+            longestPathStack.push(i);
+        }
+    }
+    while(!longestPathStack.empty()){
+        currentNode = longestPathStack.top();
+        longestPathStack.pop();
+        for(int i = 0; i < sccCount; i++){
+            if(dag[currentNode][i] == 1){
+                receptors[i]--;
+                longestPathList[i] = max(longestPathList[i], longestPathList[currentNode] + 1);
+                if(receptors[i] == 0){
+                    longestPathStack.push(i);
+                }
+            }
+        }
+    }
+    int res = 0;
+    for(int i = 0; i < sccCount; i++){
+        res = max(res, longestPathList[i]);
+    }
+    printf("%d\n", res);
+}
 
 int main() {
     readinput();
-    findSCC();
+    tarjan();
     topologicalSort();
     builtMatrix();
     longestPath();
