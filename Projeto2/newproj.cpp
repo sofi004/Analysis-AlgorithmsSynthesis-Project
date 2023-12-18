@@ -122,7 +122,7 @@ void longestPath(){
                 longestPathList[i] = max(longestPathList[i], longestPathList[j] +1);
                 if(longestPathList[i] > maximum){
                     maximum = longestPathList[i];
-            }
+                }
             }
         }
     }
@@ -131,6 +131,7 @@ void longestPath(){
 */
 
 void longestPath(){
+    int res = 0;
     int currentNode;
     vector<int> receptors = vector<int>(sccCount, 0);
     vector<int> longestPathList = vector<int>(sccCount, 0);
@@ -150,15 +151,14 @@ void longestPath(){
             if(dag[currentNode][i] == 1){
                 receptors[i]--;
                 longestPathList[i] = max(longestPathList[i], longestPathList[currentNode] + 1);
+                if(longestPathList[i] > res){
+                    res = longestPathList[i];
+                }
                 if(receptors[i] == 0){
                     longestPathStack.push(i);
                 }
             }
         }
-    }
-    int res = 0;
-    for(int i = 0; i < sccCount; i++){
-        res = max(res, longestPathList[i]);
     }
     printf("%d\n", res);
 }
@@ -169,9 +169,5 @@ int main() {
     topologicalSort();
     builtMatrix();
     longestPath();
-    for(int i = 0; i < N;i++){
-        printf("%d ",low[i]);
-    }
-    printf("\n");
     return 0;
 }
