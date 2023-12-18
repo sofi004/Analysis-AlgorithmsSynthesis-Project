@@ -70,12 +70,11 @@ void dfs(int start) {
             }
 
             if (low[currentId] == ids[currentId]) {
-                // currentId é o início de uma nova componente fortemente conectada
                 while (!tarjanStack.empty()) {
                     int v = tarjanStack.top();
                     tarjanStack.pop();
                     onStack[v] = false;
-                    low[v] = low[currentId]; // atualizar todos os nós na SCC com o mesmo valor
+                    low[v] = low[currentId];
                     if (v == currentId) break;
                 }
                 sccCount++;
