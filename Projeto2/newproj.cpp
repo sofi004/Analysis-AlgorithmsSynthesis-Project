@@ -91,6 +91,20 @@ void findSCC() {
     }
 }
 
+void topologicalSort(){
+    int count = 0;
+    vector<int> auxCount = vector<int>(N, -1);
+    for(int i = 0; i < N; i++){
+        if(auxCount[low[i]] == -1){
+            auxCount[low[i]] = count;
+            low[i] = count;
+            count ++;
+        }
+        else{
+            low[i] = auxCount[low[i]];
+        }
+    }
+}
 
 void builtMatrix(){
     dag = vector<vector<int>>(sccCount, vector<int>(sccCount, 0));
@@ -124,6 +138,7 @@ void longestPath(){
 int main() {
     readinput();
     findSCC();
+    topologicalSort();
     builtMatrix();
     longestPath();
     for(int i = 0; i < N;i++){
