@@ -69,8 +69,12 @@ void dfs() {
     }
 }
 
+//Fazer a parte que consiste em percorrer a transposta do grafo e com um 
+//sccCount ir colocando o valor correto do scc nos indices corretos 
+//topologimente ordenados. 
+//Para isso só precisamos de ter conhecimento da stack endValues e da matrix.
 void findSCCs(){
-    
+
 }
 
 /*
