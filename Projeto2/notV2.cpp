@@ -23,6 +23,17 @@ void readinput() {
     }
 }
 
+
+//Fazer a parte que consiste em percorrer a transposta do grafo e com um 
+//sccCount ir colocando o valor correto do scc nos indices corretos 
+//topologimente ordenados. 
+//Para isso só precisamos de ter conhecimento da stack endValues e da matrix.
+void findSCCs(stack<int> endValues){
+    int sccCount = 0;
+    vector<int> onStackS = vector<int>(N, -1);
+}
+
+
 void dfs() {
     stack<int> s;
     stack<int> endValues;
@@ -62,19 +73,13 @@ void dfs() {
             }
         }
     }
+    findSCCs(endValues);
+
     while (!endValues.empty()) {
     int node = endValues.top();
     endValues.pop();
     cout << "Node: " << node << endl;
     }
-}
-
-//Fazer a parte que consiste em percorrer a transposta do grafo e com um 
-//sccCount ir colocando o valor correto do scc nos indices corretos 
-//topologimente ordenados. 
-//Para isso só precisamos de ter conhecimento da stack endValues e da matrix.
-void findSCCs(){
-
 }
 
 /*
@@ -112,7 +117,6 @@ void longestPath(){
 int main() {
     readinput();
     dfs();
-    findSCCs();
     //builtMatrix();
     //longestPath();
     return 0;
