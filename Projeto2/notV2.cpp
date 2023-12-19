@@ -66,11 +66,50 @@ void dfs() {
     int node = endValues.top();
     endValues.pop();
     cout << "Node: " << node << endl;
+    }
 }
+
+void findSCCs(){
+    
 }
+
+/*
+void builtMatrix(){
+    dag = vector<vector<int>>(sccCount, vector<int>(sccCount, 0));
+    for(int i = 0; i < N; i++){
+        for(int j = 0; j < N; j++){
+            if(matrix[i][j] == 1){
+                if(low[i] != low[j]){
+                    dag[low[i]][low[j]] = 1;
+                }
+            }
+        }
+    }
+}
+
+void longestPath(){
+    int maximum = 0;
+    vector<int> longestPathList = vector<int>(sccCount, 0);
+    for(int i = sccCount -1; i >= 0; i--){
+        for(int j = 0; j < sccCount; j++){
+            if(dag[i][j] == 1){
+                longestPathList[i] = max(longestPathList[i], longestPathList[j] +1);
+                if(longestPathList[i] > maximum){
+                    maximum = longestPathList[i];
+                }
+            }
+        }
+    }
+    printf("%d\n", maximum);
+}
+*/
+
 
 int main() {
     readinput();
     dfs();
+    findSCCs();
+    //builtMatrix();
+    //longestPath();
     return 0;
 }
