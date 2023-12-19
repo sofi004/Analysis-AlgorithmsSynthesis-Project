@@ -80,7 +80,7 @@ void dfs() {
             while (!s.empty()) {
                 int temp = s.top();
                 bool hasUnvisitedNeighbor = false;
-                for (int j = 0; j < matrix[temp].size(); j++) {
+                for (int j = 0; j < (int)matrix[temp].size(); j++) {
                     int next = matrix[temp][j]; 
                     if (!visited[next]) {
                         if (!onStackS[next]) {
